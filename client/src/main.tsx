@@ -1,22 +1,96 @@
-import React, { useState } from 'react'
-import { XorO } from './types'
+import _, { update } from "lodash";
+import React, { useCallback, useState } from "react";
+import {
+  BoardState,
+  displayXorO,
+  GameState,
+  getEmptyBoard,
+  XorO,
+} from "./types";
+import BoardDisplay from "./components/board";
 
+const checkWinCondition = (board: BoardState): XorO | 0 => {
+  // The sum of a winning line will be either N or -N
+  const rowResults: number[] = board.map((row) => _.sum(row));
+  const indices = [...Array(board.length).keys()];
+  const colResults: number[] = indices.map((xIndex) =>
+    _.sum(board.map((row) => row[xIndex])),
+  );
+  const diagResults: number[] = [
+    _.sum(indices.map((i) => board[i][i])),
+    _.sum(indices.map((i) => board[i][board.length - 1 - i])),
+  ];
+
+  const results = [...rowResults, ...colResults, ...diagResults];
+  console.log(results, board.length);
+
+  return results.reduce<XorO | 0>((winner, sum) => {
+    if (Math.abs(sum) == board.length) {
+      return (sum / board.length) as XorO;
+    }
+    return winner;
+  }, 0);
+};
 
 export const Main = () => {
-  const [board, setBoard] = useState<(XorO | undefined)[][]>([
-    [undefined, undefined, undefined],
-    [undefined, undefined, undefined],
-    [undefined, undefined, undefined]
-  ])
+  const [boardSize, setBoardSize] = useState<number>(3);
 
-  return <div className='flex flex-col mt-10 items-center gap-10'>
-    <div className='font-bold text-2xl'>Tic Tac Toe</div>
-    <div className='flex flex-col gap-1'>
-      {board.map(row => <div className='flex gap-1'>
-        {row.map(column => <div className='border-2 border-gray-900 w-10 h-10 cursor-pointer items-center justify-center text-2xl font-bold flex'>
-          {column}
-        </div>)}
-      </div>)}
+  const [gameState, setGameState] = useState<GameState>("playing");
+
+  // Generate n x n empty board
+  const [board, setBoard] = useState<BoardState>(getEmptyBoard(boardSize));
+  console.log(JSON.stringify(board));
+
+  // X moves first, board state determines current player
+  const moveCount = board.reduce<number>((moveCount, row) => {
+    return moveCount + _.sum(_.map(row, Math.abs));
+  }, 0);
+  const nextMoveValue: XorO = moveCount % 2 ? -1 : 1;
+
+  // Update game state
+  if (
+    gameState == "playing" &&
+    moveCount >= boardSize * 2 - 1 &&
+    moveCount < boardSize * boardSize
+  ) {
+    const winner = checkWinCondition(board);
+    console.log(winner);
+    if (!!winner) {
+      setGameState(("won by " + displayXorO(winner)) as GameState);
+    }
+  } else if (gameState == "playing" && moveCount == boardSize * boardSize) {
+    setGameState("catscan");
+  }
+
+  // Record player moves
+  const makeMove = useCallback(
+    (yIndex, xIndex) => {
+      // TODO: Handle new game
+      if (gameState !== "playing") {
+        alert("new game?");
+        return;
+      }
+      // TODO: Handle out of bounds
+      const selectedValue = board[yIndex][xIndex];
+      if (!!selectedValue) {
+        // TODO: Improve alerting?
+        alert("Invalid move: square already selected");
+      }
+      const updatedBoard = [...board];
+      updatedBoard[yIndex][xIndex] = nextMoveValue;
+      setBoard(updatedBoard);
+    },
+    [board, gameState],
+  );
+
+  return (
+    <div className="flex flex-col mt-10 items-center gap-10">
+      <div className="font-bold text-2xl">Tic Tac Toe</div>
+      <div className="font-bold text-xl">{gameState}</div>
+      <div className="font-bold text-xl">
+        To play: {displayXorO(nextMoveValue)}
+      </div>
+      <BoardDisplay boardState={board} makeMove={makeMove} />
     </div>
-  </div>
-}
+  );
+};
