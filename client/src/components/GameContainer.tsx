@@ -1,13 +1,13 @@
-import _, { update } from "lodash";
-import React, { useCallback, useState } from "react";
+import _ from "lodash";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   BoardState,
   displayXorO,
   GameState,
   getEmptyBoard,
   XorO,
-} from "./types";
-import BoardDisplay from "./components/board";
+} from "../types";
+import BoardDisplay from "./BoardDisplay";
 
 const checkWinCondition = (board: BoardState): XorO | 0 => {
   // The sum of a winning line will be either N or -N
@@ -32,14 +32,25 @@ const checkWinCondition = (board: BoardState): XorO | 0 => {
   }, 0);
 };
 
-export const Main = () => {
-  const [boardSize, setBoardSize] = useState<number>(3);
-
-  const [gameState, setGameState] = useState<GameState>("playing");
-
+export const GameContainer = ({
+  boardSize,
+  gameState,
+  setGameState,
+  startNewGame,
+}: {
+  boardSize: number;
+  gameState: GameState;
+  setGameState: (gameState: GameState) => void;
+  startNewGame: () => void;
+}) => {
   // Generate n x n empty board
   const [board, setBoard] = useState<BoardState>(getEmptyBoard(boardSize));
-  console.log(JSON.stringify(board));
+
+  useEffect(() => {
+    if (gameState == "ready" && boardSize !== board.length) {
+      setBoard(getEmptyBoard(boardSize));
+    }
+  }, [boardSize]);
 
   // X moves first, board state determines current player
   const moveCount = board.reduce<number>((moveCount, row) => {
@@ -65,9 +76,12 @@ export const Main = () => {
   // Record player moves
   const makeMove = useCallback(
     (yIndex, xIndex) => {
-      // TODO: Handle new game
-      if (gameState !== "playing") {
-        alert("new game?");
+      if (gameState == "ready") {
+        setGameState("playing");
+      } else if (gameState !== "playing") {
+        if (window.confirm("Want to start a new game?")) {
+          startNewGame();
+        }
         return;
       }
       // TODO: Handle out of bounds
@@ -85,7 +99,6 @@ export const Main = () => {
 
   return (
     <div className="flex flex-col mt-10 items-center gap-10">
-      <div className="font-bold text-2xl">Tic Tac Toe</div>
       <div className="font-bold text-xl">{gameState}</div>
       <div className="font-bold text-xl">
         To play: {displayXorO(nextMoveValue)}
@@ -94,3 +107,4 @@ export const Main = () => {
     </div>
   );
 };
+export default GameContainer;

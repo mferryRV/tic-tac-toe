@@ -8,7 +8,7 @@ const BoardDisplay = ({
   boardState: BoardState;
   makeMove: (yIndex: number, xIndex: number) => void;
 }) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 bg-cta">
     {boardState.map((row, yIndex) => (
       <div className="flex gap-1">
         {row.map((column, xIndex) => (
