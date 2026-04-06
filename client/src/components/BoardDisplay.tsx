@@ -1,7 +1,7 @@
 import React from "react";
 import { BoardState } from "../types";
-import Spruce from "./images/Spruce";
-import O from "./images/O";
+import Spruce from "./icons/Spruce";
+import O from "./icons/O";
 
 const BoardDisplay = ({
   boardState,
@@ -18,9 +18,9 @@ const BoardDisplay = ({
         : "gap-1.5";
 
   return (
-    <div className="w-full flex-row items-center px-6 max-w-md">
+    <div className="w-full flex-row items-center">
       <div className="bg-cta p-3 rounded-md">
-        <div className={`bg-bg-green flex flex-col ${gapSize}`}>
+        <div className={`bg-dark flex flex-col ${gapSize}`}>
           {boardState.map((row, yIndex) => (
             <div className={`flex ${gapSize}`}>
               {row.map((column, xIndex) => (

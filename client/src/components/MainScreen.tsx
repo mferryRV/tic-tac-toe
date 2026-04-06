@@ -13,8 +13,8 @@ export const MainScreen = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-10">
-      <div className="font-bold text-2xl p-4 w-full text-center bg-bg-green text-white">
+    <div className="flex flex-col items-center gap-6">
+      <div className="font-bold text-2xl p-4 w-full text-center bg-dark text-white">
         <h1>Tic Tac Toe</h1>
       </div>
       <GameContainer
@@ -39,9 +39,9 @@ export const MainScreen = () => {
           <p className="text-xl self-auto">{boardSize}</p>
         </div>
       </div>
-      {["won by X", "won by O", "catscan"].includes(gameState) && (
+      {["X", "O", "catscan"].includes(gameState) && (
         <div
-          className="flex bg-cta py-2 px-6 border-bg-green border-2 rounded-md"
+          className="flex bg-cta py-2 px-6 border-dark border-2 rounded-md"
           onClick={startNewGame}
         >
           <p className="text-xl text-center w-full">Play again</p>

@@ -1,12 +1,7 @@
 export type XorO = -1 | 1;
 export const displayXorO = (val: XorO) => (val < 0 ? "O" : "X");
 
-export type GameState =
-  | "ready"
-  | "playing"
-  | "won by X"
-  | "won by O"
-  | "catscan";
+export type GameState = "ready" | "playing" | "X" | "O" | "catscan";
 
 export type BoardState = (XorO | 0)[][];
 export const getEmptyBoard = (n: number): BoardState =>
