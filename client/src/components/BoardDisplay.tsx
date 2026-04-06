@@ -7,21 +7,35 @@ const BoardDisplay = ({
 }: {
   boardState: BoardState;
   makeMove: (yIndex: number, xIndex: number) => void;
-}) => (
-  <div className="flex flex-col gap-1 bg-cta">
-    {boardState.map((row, yIndex) => (
-      <div className="flex gap-1">
-        {row.map((column, xIndex) => (
-          <div
-            onClick={() => makeMove(yIndex, xIndex)}
-            className="border-2 border-gray-900 w-10 h-10 cursor-pointer items-center justify-center text-2xl font-bold flex"
-          >
-            {column == 0 ? "" : displayXorO(column)}
-          </div>
-        ))}
+}) => {
+  const gapSize =
+    boardState.length > 10
+      ? "gap-0.5"
+      : boardState.length > 6
+        ? "gap-1"
+        : "gap-1.5";
+
+  return (
+    <div className="w-full flex-row items-center px-6 max-w-md">
+      <div className="bg-cta p-3 rounded-md">
+        <div className={`bg-bg-green flex flex-col ${gapSize}`}>
+          {boardState.map((row, yIndex) => (
+            <div className={`flex ${gapSize}`}>
+              {row.map((column, xIndex) => (
+                <div
+                  onClick={() => makeMove(yIndex, xIndex)}
+                  className={`bg-cta p-1 flex-1 aspect-square cursor-pointer items-center justify-center text-2xl font-bold flex ${column == -1 && "text-white"}`}
+                >
+                  {/* TODO: Replace with SVGs */}
+                  {column == 0 ? "" : displayXorO(column)}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
-);
+    </div>
+  );
+};
 
 export default BoardDisplay;

@@ -89,6 +89,7 @@ export const GameContainer = ({
       if (!!selectedValue) {
         // TODO: Improve alerting?
         alert("Invalid move: square already selected");
+        return;
       }
       const updatedBoard = [...board];
       updatedBoard[yIndex][xIndex] = nextMoveValue;
@@ -98,7 +99,7 @@ export const GameContainer = ({
   );
 
   return (
-    <div className="flex flex-col mt-10 items-center gap-10">
+    <div className="flex flex-col w-full items-center gap-10">
       <div className="font-bold text-xl">{gameState}</div>
       <div className="font-bold text-xl">
         To play: {displayXorO(nextMoveValue)}
