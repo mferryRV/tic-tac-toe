@@ -1,5 +1,7 @@
 import React from "react";
-import { BoardState, displayXorO } from "../types";
+import { BoardState } from "../types";
+import Spruce from "./images/Spruce";
+import O from "./images/O";
 
 const BoardDisplay = ({
   boardState,
@@ -26,8 +28,9 @@ const BoardDisplay = ({
                   onClick={() => makeMove(yIndex, xIndex)}
                   className={`bg-cta p-1 flex-1 aspect-square cursor-pointer items-center justify-center text-2xl font-bold flex ${column == -1 && "text-white"}`}
                 >
-                  {/* TODO: Replace with SVGs */}
-                  {column == 0 ? "" : displayXorO(column)}
+                  {/* TODO: Replace with SVGs & style to match height */}
+                  {column == 1 && <Spruce />}
+                  {column == -1 && <O />}
                 </div>
               ))}
             </div>
