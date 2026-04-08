@@ -17,10 +17,6 @@ module.exports = (env) => ({
         loader: "ts-loader",
       },
       {
-        test: /\.(webp|jpe?g|svg|png)$/i,
-        loader: "file-loader",
-      },
-      {
         test: /\.(css|scss)$/i,
         use: [
           "style-loader",

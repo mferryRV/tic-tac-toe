@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   BoardState,
@@ -60,10 +59,10 @@ export const GameContainer = ({
         selectedValue = board[yIndex][xIndex];
       } catch (e) {
         console.error(
-          `Selected position x:${xIndex}, y:${yIndex} out of bounds`,
+          `Selected position x:${xIndex}, y:${yIndex} out of bounds (${e})`,
         );
       }
-      if (!!selectedValue) {
+      if (selectedValue) {
         alert(content.alert.invalidMove);
         return;
       }
@@ -85,7 +84,7 @@ export const GameContainer = ({
           { player: nextPlayer, yIndex, xIndex },
           updatedBoard,
         );
-        if (!!winner) {
+        if (winner) {
           setGameState(displayXorO(winner) as GameState);
         }
       } else if (gameState == "playing" && moveCount == boardSize * boardSize) {
@@ -98,13 +97,14 @@ export const GameContainer = ({
   return (
     <VFlex className="w-full items-center gap-4">
       <HFlex className="h-full w-full gap-2 items-stretch">
-        {([1, -1] as XorO[]).map((val) => (
+        {([1, -1] as XorO[]).map((player) => (
           <PlayerTile
-            player={val}
+            key={player}
+            player={player}
             isTurn={
-              ["playing", "ready"].includes(gameState) && nextPlayer == val
+              ["playing", "ready"].includes(gameState) && nextPlayer == player
             }
-            isWinner={gameState === displayXorO(val)}
+            isWinner={gameState === displayXorO(player)}
           />
         ))}
       </HFlex>

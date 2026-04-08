@@ -22,9 +22,10 @@ const BoardDisplay = ({
       <div className="w-full bg-cta p-3 rounded-md">
         <VFlex className={`bg-dark ${gapSize}`}>
           {boardState.map((row, yIndex) => (
-            <HFlex className={gapSize}>
+            <HFlex key={yIndex} className={gapSize}>
               {row.map((column, xIndex) => (
                 <div
+                  key={xIndex}
                   onClick={() => makeMove(yIndex, xIndex)}
                   className={`bg-cta p-1 flex-1 aspect-square cursor-pointer items-center justify-center text-2xl font-bold flex ${column == -1 && "text-white"}`}
                 >

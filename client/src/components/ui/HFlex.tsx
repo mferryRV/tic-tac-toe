@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-export default ({
+const HFlex = ({
   className,
   onClick,
   children,
@@ -13,3 +13,5 @@ export default ({
     {children}
   </div>
 );
+
+export default HFlex;

@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export type XorO = -1 | 1;
 export const displayXorO = (val: XorO) => (val < 0 ? "O" : "X");
 
@@ -17,7 +15,7 @@ export type Move = {
 
 export const getMoveCount = (board: BoardState): number =>
   board.reduce<number>((moveCount, row) => {
-    return moveCount + _.sum(_.map(row, Math.abs));
+    return moveCount + row.reduce<number>((sum, val) => sum + Math.abs(val), 0);
   }, 0);
 
 export const getNextPlayer = (board: BoardState): XorO =>

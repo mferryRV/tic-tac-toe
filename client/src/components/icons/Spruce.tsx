@@ -1,6 +1,6 @@
 import React from "react";
 
-export default ({ color = "#fff" }: { color?: string }) => (
+const Spruce = ({ color = "#fff" }: { color?: string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="100%"
@@ -16,3 +16,5 @@ export default ({ color = "#fff" }: { color?: string }) => (
     </g>
   </svg>
 );
+
+export default Spruce;
