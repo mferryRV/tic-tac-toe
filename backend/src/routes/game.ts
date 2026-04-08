@@ -7,7 +7,7 @@ const MAX_BOARD_SIZE = 15;
 
 const router = new Router({ prefix: "/game" });
 
-router.post("/result", (ctx) => {
+router.post("/result", async (ctx) => {
   const body = ctx.request.body as GameResult;
 
   if (!body.id || !body.result || !body.completedAt || !body.boardSize) {
@@ -30,11 +30,11 @@ router.post("/result", (ctx) => {
     return;
   }
 
-  addResult(body);
+  await addResult(body);
   ctx.status = 201;
 });
 
-router.get("/results", (ctx) => {
+router.get("/results", async (ctx) => {
   const minBoardSize = Number(ctx.query.minBoardSize ?? MIN_BOARD_SIZE);
   const maxBoardSize = Number(ctx.query.maxBoardSize ?? MAX_BOARD_SIZE);
 
@@ -50,7 +50,7 @@ router.get("/results", (ctx) => {
     return;
   }
 
-  const results = getResults(minBoardSize, maxBoardSize);
+  const results = await getResults(minBoardSize, maxBoardSize);
 
   const stats = results.reduce(
     (acc, r) => {

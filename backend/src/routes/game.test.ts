@@ -1,5 +1,12 @@
 import request from "supertest";
 import app from "../app";
+import { addResult, getResults } from "../store";
+import { GameResult } from "../types";
+
+jest.mock("../store");
+
+const mockAddResult = addResult as jest.MockedFunction<typeof addResult>;
+const mockGetResults = getResults as jest.MockedFunction<typeof getResults>;
 
 const agent = () => request(app.callback());
 
@@ -10,16 +17,13 @@ const validResult = {
   boardSize: 3,
 };
 
-// Use boardSize 15 for GET tests to isolate from seed data and other tests
-const postResult = (overrides = {}) =>
-  agent()
-    .post("/game/result")
-    .set("Content-Type", "application/json")
-    .send({ ...validResult, boardSize: 15, ...overrides });
-
 describe("POST /game/result", () => {
+  beforeEach(() => {
+    mockAddResult.mockResolvedValue(undefined);
+  });
+
   it("returns 201 on a valid result", async () => {
-    const res = await request(app.callback())
+    const res = await agent()
       .post("/game/result")
       .set("Content-Type", "application/json")
       .send(validResult);
@@ -29,7 +33,7 @@ describe("POST /game/result", () => {
 
   it("returns 400 when id is missing", async () => {
     const { id: _, ...body } = validResult;
-    const res = await request(app.callback())
+    const res = await agent()
       .post("/game/result")
       .set("Content-Type", "application/json")
       .send(body);
@@ -40,7 +44,7 @@ describe("POST /game/result", () => {
 
   it("returns 400 when result is missing", async () => {
     const { result: _, ...body } = validResult;
-    const res = await request(app.callback())
+    const res = await agent()
       .post("/game/result")
       .set("Content-Type", "application/json")
       .send(body);
@@ -51,7 +55,7 @@ describe("POST /game/result", () => {
 
   it("returns 400 when completedAt is missing", async () => {
     const { completedAt: _, ...body } = validResult;
-    const res = await request(app.callback())
+    const res = await agent()
       .post("/game/result")
       .set("Content-Type", "application/json")
       .send(body);
@@ -62,7 +66,7 @@ describe("POST /game/result", () => {
 
   it("returns 400 when boardSize is missing", async () => {
     const { boardSize: _, ...body } = validResult;
-    const res = await request(app.callback())
+    const res = await agent()
       .post("/game/result")
       .set("Content-Type", "application/json")
       .send(body);
@@ -103,11 +107,15 @@ describe("POST /game/result", () => {
 });
 
 describe("GET /game/results", () => {
-  beforeAll(async () => {
-    await postResult({ id: "get-1", result: "X",       completedAt: "2026-04-08T10:00:00.000Z" });
-    await postResult({ id: "get-2", result: "O",       completedAt: "2026-04-08T11:00:00.000Z" });
-    await postResult({ id: "get-3", result: "catscan", completedAt: "2026-04-08T12:00:00.000Z" });
-    await postResult({ id: "get-4", result: "X",       completedAt: "2026-04-08T13:00:00.000Z" });
+  const storedResults: GameResult[] = [
+    { id: "get-4", result: "X",       completedAt: "2026-04-08T13:00:00.000Z", boardSize: 15 },
+    { id: "get-3", result: "catscan", completedAt: "2026-04-08T12:00:00.000Z", boardSize: 15 },
+    { id: "get-2", result: "O",       completedAt: "2026-04-08T11:00:00.000Z", boardSize: 15 },
+    { id: "get-1", result: "X",       completedAt: "2026-04-08T10:00:00.000Z", boardSize: 15 },
+  ];
+
+  beforeEach(() => {
+    mockGetResults.mockResolvedValue(storedResults);
   });
 
   const getResults = (params = "") =>
