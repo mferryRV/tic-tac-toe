@@ -15,18 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render backend deploy
-        id: trigger
-        run: |
-          response=$(curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
-          echo "deploy_id=$(echo $response | jq -r '.deploy.id')" >> $GITHUB_OUTPUT
+        run: curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
 
       - name: Wait for deploy to complete
         run: |
+          sleep 10
           while true; do
             status=$(curl -s \
               -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-              "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys/${{ steps.trigger.outputs.deploy_id }}" \
-              | jq -r '.status')
+              "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=1" \
+              | jq -r '.[0].deploy.status')
             echo "Deploy status: $status"
             case $status in
               live)
