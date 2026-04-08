@@ -1,9 +1,9 @@
 import app from "./app";
-import { initDb } from "./store";
+import { runMigrations } from "./db";
 
 const PORT = process.env.PORT ?? 3001;
 
-initDb().then(() => {
+runMigrations().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
