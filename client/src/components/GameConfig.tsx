@@ -1,5 +1,5 @@
 import React from "react";
-import { GameState } from "../types";
+import { GameState } from "../lib/game";
 import { Refresh } from "./icons";
 import { HFlex, VFlex } from "./ui";
 

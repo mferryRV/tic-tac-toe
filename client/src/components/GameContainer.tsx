@@ -2,11 +2,14 @@ import _ from "lodash";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   BoardState,
+  checkWinCondition,
   displayXorO,
   GameState,
   getEmptyBoard,
+  getMoveCount,
+  getNextPlayer,
   XorO,
-} from "../types";
+} from "../lib/game";
 import BoardDisplay from "./BoardDisplay";
 import PlayerTile from "./PlayerTile";
 import { HFlex, VFlex } from "./ui";
@@ -16,29 +19,6 @@ const content = {
     newGame: "Want to start a new game?",
     invalidMove: "Invalid move: square already selected",
   },
-};
-
-const checkWinCondition = (board: BoardState): XorO | 0 => {
-  // The sum of a winning line will be either N or -N
-  const rowResults: number[] = board.map((row) => _.sum(row));
-  const indices = [...Array(board.length).keys()];
-  const colResults: number[] = indices.map((xIndex) =>
-    _.sum(board.map((row) => row[xIndex])),
-  );
-  const diagResults: number[] = [
-    _.sum(indices.map((i) => board[i][i])),
-    _.sum(indices.map((i) => board[i][board.length - 1 - i])),
-  ];
-
-  const results = [...rowResults, ...colResults, ...diagResults];
-  console.log(results, board.length);
-
-  return results.reduce<XorO | 0>((winner, sum) => {
-    if (Math.abs(sum) == board.length) {
-      return (sum / board.length) as XorO;
-    }
-    return winner;
-  }, 0);
 };
 
 export const GameContainer = ({
@@ -62,25 +42,7 @@ export const GameContainer = ({
   }, [boardSize]);
 
   // X moves first, board state determines current player
-  const moveCount = board.reduce<number>((moveCount, row) => {
-    return moveCount + _.sum(_.map(row, Math.abs));
-  }, 0);
-  const nextMoveValue: XorO = moveCount % 2 ? -1 : 1;
-
-  // Update game state
-  if (
-    gameState == "playing" &&
-    moveCount >= boardSize * 2 - 1 &&
-    moveCount < boardSize * boardSize
-  ) {
-    const winner = checkWinCondition(board);
-    console.log(winner);
-    if (!!winner) {
-      setGameState(displayXorO(winner) as GameState);
-    }
-  } else if (gameState == "playing" && moveCount == boardSize * boardSize) {
-    setGameState("catscan");
-  }
+  const nextPlayer: XorO = getNextPlayer(board);
 
   // Record player moves
   const makeMove = useCallback(
@@ -93,15 +55,42 @@ export const GameContainer = ({
         }
         return;
       }
-      // TODO: Handle out of bounds
-      const selectedValue = board[yIndex][xIndex];
+      let selectedValue: number | undefined;
+      try {
+        selectedValue = board[yIndex][xIndex];
+      } catch (e) {
+        console.error(
+          `Selected position x:${xIndex}, y:${yIndex} out of bounds`,
+        );
+      }
       if (!!selectedValue) {
         alert(content.alert.invalidMove);
         return;
       }
+
+      // Update board state
       const updatedBoard = [...board];
-      updatedBoard[yIndex][xIndex] = nextMoveValue;
+      updatedBoard[yIndex][xIndex] = nextPlayer;
       setBoard(updatedBoard);
+
+      const moveCount = getMoveCount(updatedBoard);
+
+      // Update game state
+      if (
+        gameState == "playing" &&
+        moveCount >= boardSize * 2 - 1 &&
+        moveCount < boardSize * boardSize
+      ) {
+        const winner = checkWinCondition(
+          { player: nextPlayer, yIndex, xIndex },
+          updatedBoard,
+        );
+        if (!!winner) {
+          setGameState(displayXorO(winner) as GameState);
+        }
+      } else if (gameState == "playing" && moveCount == boardSize * boardSize) {
+        setGameState("catscan");
+      }
     },
     [board, gameState],
   );
@@ -113,7 +102,7 @@ export const GameContainer = ({
           <PlayerTile
             player={val}
             isTurn={
-              ["playing", "ready"].includes(gameState) && nextMoveValue == val
+              ["playing", "ready"].includes(gameState) && nextPlayer == val
             }
             isWinner={gameState === displayXorO(val)}
           />

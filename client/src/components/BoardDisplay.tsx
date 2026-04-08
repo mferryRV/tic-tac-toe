@@ -1,5 +1,5 @@
 import React from "react";
-import { BoardState } from "../types";
+import { BoardState } from "../lib/game";
 import { O, Spruce } from "./icons";
 import { HFlex, VFlex } from "./ui";
 

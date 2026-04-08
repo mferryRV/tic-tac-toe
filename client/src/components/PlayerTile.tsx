@@ -1,5 +1,5 @@
 import React from "react";
-import { XorO } from "../types";
+import { XorO } from "../lib/game";
 import { Spruce, O } from "./icons";
 import { HFlex } from "./ui";
 

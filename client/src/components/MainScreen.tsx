@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import GameContainer from "./GameContainer";
-import { GameState } from "../types";
+import { GameState } from "../lib/game";
 import GameConfig from "./GameConfig";
 import { Header, VFlex } from "./ui";
 
