@@ -7,7 +7,7 @@ module.exports = (env) => ({
   entry: "./src/index.tsx",
   devtool: "source-map",
   output: {
-    publicPath: "/",
+    publicPath: "auto",
     filename: "[name].[contenthash].js",
   },
   module: {
