@@ -14,24 +14,24 @@ jobs:
   deploy-backend:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Render backend deploy
+      - name: Wait for Render deploy to complete
         run: |
-          response=$(curl -s -X POST \
-            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-            -H "accept: application/json" \
-            -H "content-type: application/json" \
-            -d '{"clearCache": "do_not_clear", "deployMode": "build_and_deploy"}' \
-            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys")
-          echo "Trigger response: $response"
-
-      - name: Wait for deploy to complete
-        run: |
-          sleep 10
+          commit_sha="${{ github.sha }}"
+          echo "Waiting for deploy of commit $commit_sha"
           while true; do
-            status=$(curl -s \
+            response=$(curl -s \
               -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-              "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=1" \
-              | jq -r '.[0].deploy.status')
+              -H "accept: application/json" \
+              "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys?limit=5")
+            deploy=$(echo "$response" | jq -r \
+              --arg sha "$commit_sha" \
+              '[.[].deploy | select(.commit.id | startswith($sha))] | first')
+            if [ "$deploy" = "null" ] || [ -z "$deploy" ]; then
+              echo "Deploy for $commit_sha not yet registered, waiting..."
+              sleep 15
+              continue
+            fi
+            status=$(echo "$deploy" | jq -r '.status')
             echo "Deploy status: $status"
             case $status in
               live)
