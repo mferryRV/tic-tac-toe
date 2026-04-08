@@ -12,11 +12,12 @@ cd client
 npm i
 npm start
 ```
-Start the backend with:
+Start the backend and db with:
 ```
+docker compose up
 cd backend
 npm i
-npm dev
+npm run dev
 ```
 
 ## Deployments

@@ -75,20 +75,16 @@ export const GameContainer = ({
       const moveCount = getMoveCount(updatedBoard);
 
       // Update game state
-      if (
-        gameState == "playing" &&
-        moveCount >= boardSize * 2 - 1 &&
-        moveCount <= boardSize * boardSize
-      ) {
+      if (gameState == "playing" && moveCount >= boardSize * 2 - 1) {
         const winner = checkWinCondition(
           { player: nextPlayer, yIndex, xIndex },
           updatedBoard,
         );
         if (winner) {
           setGameState(displayXorO(winner) as GameState);
+        } else if (moveCount == boardSize * boardSize) {
+          setGameState("catscan");
         }
-      } else if (gameState == "playing" && moveCount == boardSize * boardSize) {
-        setGameState("catscan");
       }
     },
     [board, gameState],
