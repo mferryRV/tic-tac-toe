@@ -16,6 +16,4 @@ const Refresh = ({ color = "#000000" }: { color?: string }) => (
   </svg>
 );
 
-Refresh.displayName = "Refresh";
-
 export default Refresh;
