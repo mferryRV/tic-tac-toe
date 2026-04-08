@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GameResult, GameStats } from "../lib/api";
 import { HFlex, VFlex } from "./ui";
 import { CaretDown, CaretUp, O, Spruce } from "./icons";
+import { displayTime } from "../lib/utils";
 
 const GameHistoryItem = ({
   result: { id, result, boardSize, completedAt },
@@ -14,11 +15,12 @@ const GameHistoryItem = ({
     ) : result == "O" ? (
       <O className="w-12" />
     ) : (
-      <p className="font-bold self-center">Catscan</p>
+      <p className="font-bold self-center w-12">Catscan</p>
     )}
     <p className="self-center">
-      {boardSize}x{boardSize} board ({completedAt.substring(0, 10)})
+      {boardSize}x{boardSize}
     </p>
+    <p className="self-center">({displayTime(completedAt)})</p>
   </HFlex>
 );
 

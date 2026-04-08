@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GameState } from "../lib/game";
 import { useGameResults, usePostGameResult } from "../lib/hooks";
 import GameConfig from "./GameConfig";
@@ -18,11 +18,23 @@ export const MainScreen = () => {
     setGameState("ready");
   };
 
+  const { mutate: postGameResult } = usePostGameResult();
+
+  useEffect(() => {
+    if (gameState === "X" || gameState === "O" || gameState === "catscan") {
+      postGameResult({
+        id: gameId,
+        result: gameState,
+        completedAt: new Date().toISOString(),
+        boardSize,
+      });
+    }
+  }, [gameState]);
+
   const {
     data: gameResults,
     isLoading: isGameResultsLoading,
     isError: hasGameResultsError,
-    refetch: refetchGameResults,
   } = useGameResults();
 
   return (
