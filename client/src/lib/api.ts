@@ -4,6 +4,7 @@ import { GameOutcome } from "./game";
 const BASE_API_URL = "http://localhost:3001";
 const defaultMinBoardSize = 3;
 const defaultMaxBoardSize = 15;
+const TIMEOUT_MS = 60_000;
 
 export type GameResult = {
   id: string;
@@ -29,6 +30,7 @@ export const postGameResult = async (result: GameResult): Promise<boolean> => {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(result),
+    signal: AbortSignal.timeout(TIMEOUT_MS),
   });
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -51,6 +53,7 @@ export const getGameResults = async ({
     {
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(TIMEOUT_MS),
     },
   );
   if (!response.ok) {

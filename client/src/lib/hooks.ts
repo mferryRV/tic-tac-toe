@@ -24,5 +24,8 @@ export const usePostGameResult = () => {
         queryKey: queryKeys.results,
       });
     },
+    onError: () => {
+      alert("Unable to save game result. Sorry!");
+    },
   });
 };
