@@ -1,7 +1,7 @@
 databases:
   - name: tictactoe-db
     databaseName: tictactoe
-    user: postgres
+    user: tictactoe
     plan: free
 
 services:
