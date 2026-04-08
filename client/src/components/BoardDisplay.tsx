@@ -2,6 +2,8 @@ import React from "react";
 import { BoardState } from "../types";
 import Spruce from "./icons/Spruce";
 import O from "./icons/O";
+import HFlex from "./ui/HFlex";
+import VFlex from "./ui/VFlex";
 
 const BoardDisplay = ({
   boardState,
@@ -18,26 +20,25 @@ const BoardDisplay = ({
         : "gap-1.5";
 
   return (
-    <div className="w-full flex-row items-center">
-      <div className="bg-cta p-3 rounded-md">
-        <div className={`bg-dark flex flex-col ${gapSize}`}>
+    <HFlex className="w-full items-center">
+      <div className="w-full bg-cta p-3 rounded-md">
+        <VFlex className={`bg-dark ${gapSize}`}>
           {boardState.map((row, yIndex) => (
-            <div className={`flex ${gapSize}`}>
+            <HFlex className={gapSize}>
               {row.map((column, xIndex) => (
                 <div
                   onClick={() => makeMove(yIndex, xIndex)}
                   className={`bg-cta p-1 flex-1 aspect-square cursor-pointer items-center justify-center text-2xl font-bold flex ${column == -1 && "text-white"}`}
                 >
-                  {/* TODO: Replace with SVGs & style to match height */}
                   {column == 1 && <Spruce />}
                   {column == -1 && <O />}
                 </div>
               ))}
-            </div>
+            </HFlex>
           ))}
-        </div>
+        </VFlex>
       </div>
-    </div>
+    </HFlex>
   );
 };
 

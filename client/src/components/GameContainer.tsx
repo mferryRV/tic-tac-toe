@@ -9,8 +9,15 @@ import {
 } from "../types";
 import BoardDisplay from "./BoardDisplay";
 import PlayerTile from "./PlayerTile";
-import Spruce from "./icons/Spruce";
-import O from "./icons/O";
+import VFlex from "./ui/VFlex";
+import HFlex from "./ui/HFlex";
+
+const content = {
+  alert: {
+    newGame: "Want to start a new game?",
+    invalidMove: "Invalid move: square already selected",
+  },
+};
 
 const checkWinCondition = (board: BoardState): XorO | 0 => {
   // The sum of a winning line will be either N or -N
@@ -82,7 +89,7 @@ export const GameContainer = ({
       if (gameState == "ready") {
         setGameState("playing");
       } else if (gameState !== "playing") {
-        if (window.confirm("Want to start a new game?")) {
+        if (window.confirm(content.alert.newGame)) {
           startNewGame();
         }
         return;
@@ -90,8 +97,7 @@ export const GameContainer = ({
       // TODO: Handle out of bounds
       const selectedValue = board[yIndex][xIndex];
       if (!!selectedValue) {
-        // TODO: Improve alerting?
-        alert("Invalid move: square already selected");
+        alert(content.alert.invalidMove);
         return;
       }
       const updatedBoard = [...board];
@@ -102,8 +108,8 @@ export const GameContainer = ({
   );
 
   return (
-    <div className="flex flex-col w-full items-center gap-4 max-w-md px-6">
-      <div className="flex flex-row h-full w-full gap-2 items-stretch">
+    <VFlex className="w-full items-center gap-4">
+      <HFlex className="h-full w-full gap-2 items-stretch">
         {([1, -1] as XorO[]).map((val) => (
           <PlayerTile
             player={val}
@@ -113,9 +119,9 @@ export const GameContainer = ({
             isWinner={gameState === displayXorO(val)}
           />
         ))}
-      </div>
+      </HFlex>
       <BoardDisplay boardState={board} makeMove={makeMove} />
-    </div>
+    </VFlex>
   );
 };
 export default GameContainer;

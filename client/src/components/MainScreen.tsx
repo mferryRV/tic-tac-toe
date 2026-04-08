@@ -1,7 +1,11 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import GameContainer from "./GameContainer";
 import { GameState } from "../types";
-import Refresh from "./icons/Refresh";
+import BoardConfig from "./BoardConfig";
+import Header from "./ui/Header";
+import VFlex from "./ui/VFlex";
+
+const content = { title: "Tic Tac Toe" };
 
 export const MainScreen = () => {
   const [gameId, setGameId] = useState<string>(crypto.randomUUID());
@@ -14,44 +18,24 @@ export const MainScreen = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6">
-      <div className="font-bold text-2xl p-4 w-full text-center bg-dark text-white">
-        <h1>Tic Tac Toe</h1>
-      </div>
-      <GameContainer
-        key={gameId}
-        boardSize={boardSize}
-        gameState={gameState}
-        setGameState={setGameState}
-        startNewGame={startNewGame}
-      />
-      <div className="flex flex-row gap-4 w-full max-w-md px-6">
-        <div className="flex flex-col gap-1 w-20">
-          <p className="w-full text-center">Board</p>
-          <p className="text-xl self-auto text-center">
-            {boardSize} x {boardSize}
-          </p>
-        </div>
-        <input
-          className="flex grow accent-cta"
-          type="range"
-          min={3}
-          max={15}
-          step={1}
-          value={boardSize}
-          onChange={({ target: { value } }) => setBoardSize(parseInt(value))}
-          disabled={gameState == "playing"}
+    <VFlex className="items-center gap-6">
+      <Header title={content.title} />
+      <VFlex className="items-center gap-6 w-full max-w-md px-6">
+        <GameContainer
+          key={gameId}
+          boardSize={boardSize}
+          gameState={gameState}
+          setGameState={setGameState}
+          startNewGame={startNewGame}
         />
-        {["X", "O", "catscan"].includes(gameState) && (
-          <div
-            className="flex h-14 aspect-square bg-cta p-2 rounded-md"
-            onClick={startNewGame}
-          >
-            <Refresh />
-          </div>
-        )}
-      </div>
-    </div>
+        <BoardConfig
+          boardSize={boardSize}
+          setBoardSize={setBoardSize}
+          gameState={gameState}
+          startNewGame={startNewGame}
+        />
+      </VFlex>
+    </VFlex>
   );
 };
 
