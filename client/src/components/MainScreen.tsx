@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import GameContainer from "./GameContainer";
 import { GameState } from "../types";
-import BoardConfig from "./BoardConfig";
+import GameConfig from "./GameConfig";
 import { Header, VFlex } from "./ui";
 
 const content = { title: "Tic Tac Toe" };
@@ -27,7 +27,7 @@ export const MainScreen = () => {
           setGameState={setGameState}
           startNewGame={startNewGame}
         />
-        <BoardConfig
+        <GameConfig
           boardSize={boardSize}
           setBoardSize={setBoardSize}
           gameState={gameState}

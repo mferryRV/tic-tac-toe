@@ -3,7 +3,7 @@ import { GameState } from "../types";
 import { Refresh } from "./icons";
 import { HFlex, VFlex } from "./ui";
 
-const BoardConfig = ({
+const GameConfig = ({
   boardSize,
   setBoardSize,
   gameState,
@@ -32,13 +32,13 @@ const BoardConfig = ({
       disabled={gameState == "playing"}
     />
     {["X", "O", "catscan"].includes(gameState) && (
-      <div
-        className="flex h-14 aspect-square bg-cta p-2 rounded-md"
+      <HFlex
+        className="h-14 aspect-square bg-cta p-2 rounded-md"
         onClick={startNewGame}
       >
         <Refresh />
-      </div>
+      </HFlex>
     )}
   </HFlex>
 );
-export default BoardConfig;
+export default GameConfig;
