@@ -1,13 +1,13 @@
 import React, { ReactNode } from "react";
 
 const VFlex = ({
-  className,
+  className = "",
   onClick,
   children,
 }: {
-  className: string;
+  className?: string;
   onClick?: () => void;
-  children: ReactNode;
+  children?: ReactNode;
 }) => (
   <div className={`flex flex-col ${className}`} onClick={onClick}>
     {children}

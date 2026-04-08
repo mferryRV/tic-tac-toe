@@ -1,13 +1,13 @@
 import React, { ReactNode } from "react";
 
 const HFlex = ({
-  className,
+  className = "",
   onClick,
   children,
 }: {
-  className: string;
+  className?: string;
   onClick?: () => void;
-  children: ReactNode;
+  children?: ReactNode;
 }) => (
   <div className={`flex flex-row ${className}`} onClick={onClick}>
     {children}

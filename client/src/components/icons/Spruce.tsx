@@ -1,7 +1,14 @@
 import React from "react";
 
-const Spruce = ({ color = "#fff" }: { color?: string }) => (
+const Spruce = ({
+  className = "",
+  color = "#fff",
+}: {
+  className?: string;
+  color?: string;
+}) => (
   <svg
+    className={className}
     xmlns="http://www.w3.org/2000/svg"
     width="100%"
     height="100%"
@@ -16,5 +23,7 @@ const Spruce = ({ color = "#fff" }: { color?: string }) => (
     </g>
   </svg>
 );
+
+Spruce.displayName = "Spruce";
 
 export default Spruce;
