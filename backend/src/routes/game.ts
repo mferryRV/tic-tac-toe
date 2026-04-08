@@ -2,6 +2,9 @@ import Router from "@koa/router";
 import { addResult, getResults } from "../store";
 import { GameResult, GameResultsResponse } from "../types";
 
+const MIN_BOARD_SIZE = 3;
+const MAX_BOARD_SIZE = 15;
+
 const router = new Router({ prefix: "/game" });
 
 router.post("/result", (ctx) => {
@@ -21,13 +24,31 @@ router.post("/result", (ctx) => {
     return;
   }
 
+  if (body.boardSize > MAX_BOARD_SIZE || body.boardSize < MIN_BOARD_SIZE) {
+    ctx.status = 400;
+    ctx.body = { error: "boardSize must be between 3 and 15" };
+    return;
+  }
+
   addResult(body);
   ctx.status = 201;
 });
 
 router.get("/results", (ctx) => {
-  const minBoardSize = Number(ctx.query.minBoardSize ?? 3);
-  const maxBoardSize = Number(ctx.query.maxBoardSize ?? 15);
+  const minBoardSize = Number(ctx.query.minBoardSize ?? MIN_BOARD_SIZE);
+  const maxBoardSize = Number(ctx.query.maxBoardSize ?? MAX_BOARD_SIZE);
+
+  if (minBoardSize < MIN_BOARD_SIZE || minBoardSize > MAX_BOARD_SIZE) {
+    ctx.status = 400;
+    ctx.body = { error: "minBoardSize must be between 3 and 15" };
+    return;
+  }
+
+  if (maxBoardSize < MIN_BOARD_SIZE || maxBoardSize > MAX_BOARD_SIZE) {
+    ctx.status = 400;
+    ctx.body = { error: "maxBoardSize must be between 3 and 15" };
+    return;
+  }
 
   const results = getResults(minBoardSize, maxBoardSize);
 

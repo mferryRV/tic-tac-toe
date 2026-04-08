@@ -1,13 +1,23 @@
 
 # Tic-Tac-Toe
 
-This is a simple, mobile-first game of tic-tac-toe built in React.
+This is a simple, mobile-first game of tic-tac-toe built in React with a Koa.js backend.
 
 ## Quickstart
-- Make sure you have **node 24** installed (ideally with a version manager, e.g. [asdf](https://asdf-vm.com/))
-- `cd client`
-- `npm i`
-- `npm start`
+Make sure you have **node 24** installed (ideally with a version manager, e.g. [asdf](https://asdf-vm.com/))
+
+Start the client with:
+```
+cd client
+npm i
+npm start
+```
+Start the backend with:
+```
+cd backend
+npm i
+npm dev
+```
 
 ## Deployments
 - Linting and tests are run when a PR is raised against the `main` branch
