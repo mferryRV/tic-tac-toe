@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import request from "supertest";
 import app from "../app";
 import { addResult, getResults } from "../store";
@@ -108,10 +109,30 @@ describe("POST /game/result", () => {
 
 describe("GET /game/results", () => {
   const storedResults: GameResult[] = [
-    { id: "get-4", result: "X",       completedAt: "2026-04-08T13:00:00.000Z", boardSize: 15 },
-    { id: "get-3", result: "catscan", completedAt: "2026-04-08T12:00:00.000Z", boardSize: 15 },
-    { id: "get-2", result: "O",       completedAt: "2026-04-08T11:00:00.000Z", boardSize: 15 },
-    { id: "get-1", result: "X",       completedAt: "2026-04-08T10:00:00.000Z", boardSize: 15 },
+    {
+      id: "get-4",
+      result: "X",
+      completedAt: "2026-04-08T13:00:00.000Z",
+      boardSize: 15,
+    },
+    {
+      id: "get-3",
+      result: "catscan",
+      completedAt: "2026-04-08T12:00:00.000Z",
+      boardSize: 15,
+    },
+    {
+      id: "get-2",
+      result: "O",
+      completedAt: "2026-04-08T11:00:00.000Z",
+      boardSize: 15,
+    },
+    {
+      id: "get-1",
+      result: "X",
+      completedAt: "2026-04-08T10:00:00.000Z",
+      boardSize: 15,
+    },
   ];
 
   beforeEach(() => {
@@ -148,8 +169,12 @@ describe("GET /game/results", () => {
   it("returns results sorted by completedAt descending", async () => {
     const res = await getResults();
     expect(res.status).toBe(200);
-    const timestamps: string[] = res.body.results.map((r: { completedAt: string }) => r.completedAt);
-    expect(timestamps).toEqual([...timestamps].sort((a, b) => b.localeCompare(a)));
+    const timestamps: string[] = res.body.results.map(
+      (r: { completedAt: string }) => r.completedAt,
+    );
+    expect(timestamps).toEqual(
+      [...timestamps].sort((a, b) => b.localeCompare(a)),
+    );
   });
 
   it("stats counts match the returned results", async () => {
@@ -157,8 +182,14 @@ describe("GET /game/results", () => {
     expect(res.status).toBe(200);
     const { results, stats } = res.body;
     expect(stats.total).toBe(results.length);
-    expect(stats.X).toBe(results.filter((r: { result: string }) => r.result === "X").length);
-    expect(stats.O).toBe(results.filter((r: { result: string }) => r.result === "O").length);
-    expect(stats.catscan).toBe(results.filter((r: { result: string }) => r.result === "catscan").length);
+    expect(stats.X).toBe(
+      results.filter((r: { result: string }) => r.result === "X").length,
+    );
+    expect(stats.O).toBe(
+      results.filter((r: { result: string }) => r.result === "O").length,
+    );
+    expect(stats.catscan).toBe(
+      results.filter((r: { result: string }) => r.result === "catscan").length,
+    );
   });
 });
