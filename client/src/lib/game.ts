@@ -23,28 +23,47 @@ export const getMoveCount = (board: BoardState): number =>
 export const getNextPlayer = (board: BoardState): XorO =>
   getMoveCount(board) % 2 ? -1 : 1;
 
+const checkWinArray = (value: XorO, array: (XorO | 0)[]): boolean => {
+  // All values in array should match player
+  let i = 0;
+  while (i < array.length && array[i] === value) {
+    i++;
+  }
+  return i == array.length;
+};
+
 export const checkWinCondition = (
   lastMove: Move,
   board: BoardState,
 ): XorO | 0 => {
-  // The sum of a winning line will be either N or -N
-  const rowResults: number[] = board.map((row) => _.sum(row));
-  const indices = [...Array(board.length).keys()];
-  const colResults: number[] = indices.map((xIndex) =>
-    _.sum(board.map((row) => row[xIndex])),
-  );
-  const diagResults: number[] = [
-    _.sum(indices.map((i) => board[i][i])),
-    _.sum(indices.map((i) => board[i][board.length - 1 - i])),
-  ];
+  const { player, yIndex, xIndex } = lastMove;
 
-  const results = [...rowResults, ...colResults, ...diagResults];
-  console.log(results, board.length);
+  const row = board[yIndex];
+  const col = board.map((row) => row[xIndex]);
 
-  return results.reduce<XorO | 0>((winner, sum) => {
-    if (Math.abs(sum) == board.length) {
-      return (sum / board.length) as XorO;
-    }
-    return winner;
-  }, 0);
+  if (checkWinArray(player, row) || checkWinArray(player, col)) {
+    return player;
+  } else if (
+    // Down-diagonal
+    yIndex == xIndex &&
+    checkWinArray(
+      player,
+      [...Array(board.length).keys()].map((i) => board[i][i]),
+    )
+  ) {
+    return player;
+  } else if (
+    // Up-diagonal
+    yIndex == board.length - 1 - xIndex &&
+    checkWinArray(
+      player,
+      [...Array(board.length).keys()].map(
+        (i) => board[i][board.length - 1 - i],
+      ),
+    )
+  ) {
+    return player;
+  }
+
+  return 0;
 };
