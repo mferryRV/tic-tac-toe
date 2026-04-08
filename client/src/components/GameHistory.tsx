@@ -35,7 +35,7 @@ const GameHistory = ({
   isLoading: boolean;
   hasError: boolean;
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <VFlex
