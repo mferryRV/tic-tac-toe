@@ -1,7 +1,6 @@
 import { GameOutcome } from "./game";
 
-// TODO: Change to deployed URL
-const BASE_API_URL = "http://localhost:3001";
+const BASE_API_URL = process.env.BACKEND_URL ?? "http://localhost:3001";
 const defaultMinBoardSize = 3;
 const defaultMaxBoardSize = 15;
 const TIMEOUT_MS = 60_000;
