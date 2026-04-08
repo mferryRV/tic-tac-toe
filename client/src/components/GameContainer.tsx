@@ -78,7 +78,7 @@ export const GameContainer = ({
       if (
         gameState == "playing" &&
         moveCount >= boardSize * 2 - 1 &&
-        moveCount < boardSize * boardSize
+        moveCount <= boardSize * boardSize
       ) {
         const winner = checkWinCondition(
           { player: nextPlayer, yIndex, xIndex },

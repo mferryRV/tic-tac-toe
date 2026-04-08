@@ -1,7 +1,14 @@
 import React from "react";
 
-const O = ({ color = "#000000" }: { color?: string }) => (
+const O = ({
+  className = "",
+  color = "#000000",
+}: {
+  className?: string;
+  color?: string;
+}) => (
   <svg
+    className={className}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 640 640"
     height="100%"
