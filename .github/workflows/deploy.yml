@@ -16,8 +16,13 @@ jobs:
     steps:
       - name: Trigger Render backend deploy
         run: |
-          response=$(curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
-          echo "Hook response: $response"
+          response=$(curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "accept: application/json" \
+            -H "content-type: application/json" \
+            -d '{"clearCache": "do_not_clear", "deployMode": "build_and_deploy"}' \
+            "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys")
+          echo "Trigger response: $response"
 
       - name: Wait for deploy to complete
         run: |
