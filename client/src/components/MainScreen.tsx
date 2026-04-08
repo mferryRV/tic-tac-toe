@@ -1,6 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import GameContainer from "./GameContainer";
 import { GameState } from "../types";
+import Refresh from "./icons/Refresh";
 
 export const MainScreen = () => {
   const [gameId, setGameId] = useState<string>(crypto.randomUUID());
@@ -24,29 +25,32 @@ export const MainScreen = () => {
         setGameState={setGameState}
         startNewGame={startNewGame}
       />
-      <div className="flex flex-col gap-2">
-        <p className="w-full text-center">Board size</p>
-        <div className="flex flex-row gap-4">
-          <input
-            type="range"
-            min={3}
-            max={15}
-            step={1}
-            value={boardSize}
-            onChange={({ target: { value } }) => setBoardSize(parseInt(value))}
-            disabled={gameState == "playing"}
-          />
-          <p className="text-xl self-auto">{boardSize}</p>
+      <div className="flex flex-row gap-4 w-full max-w-md px-6">
+        <div className="flex flex-col gap-1 w-20">
+          <p className="w-full text-center">Board</p>
+          <p className="text-xl self-auto text-center">
+            {boardSize} x {boardSize}
+          </p>
         </div>
+        <input
+          className="flex grow accent-cta"
+          type="range"
+          min={3}
+          max={15}
+          step={1}
+          value={boardSize}
+          onChange={({ target: { value } }) => setBoardSize(parseInt(value))}
+          disabled={gameState == "playing"}
+        />
+        {["X", "O", "catscan"].includes(gameState) && (
+          <div
+            className="flex h-14 aspect-square bg-cta p-2 rounded-md"
+            onClick={startNewGame}
+          >
+            <Refresh />
+          </div>
+        )}
       </div>
-      {["X", "O", "catscan"].includes(gameState) && (
-        <div
-          className="flex bg-cta py-2 px-6 border-dark border-2 rounded-md"
-          onClick={startNewGame}
-        >
-          <p className="text-xl text-center w-full">Play again</p>
-        </div>
-      )}
     </div>
   );
 };
