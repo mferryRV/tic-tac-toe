@@ -1,8 +1,7 @@
 import React from "react";
 import { GameState } from "../types";
-import Refresh from "./icons/Refresh";
-import HFlex from "./ui/HFlex";
-import VFlex from "./ui/VFlex";
+import { Refresh } from "./icons";
+import { HFlex, VFlex } from "./ui";
 
 const BoardConfig = ({
   boardSize,

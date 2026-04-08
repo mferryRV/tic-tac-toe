@@ -1,7 +1,7 @@
 import React from "react";
 import { XorO } from "../types";
-import Spruce from "./icons/Spruce";
-import O from "./icons/O";
+import { Spruce, O } from "./icons";
+import { HFlex } from "./ui";
 
 const PlayerTile = ({
   player,
@@ -16,9 +16,9 @@ const PlayerTile = ({
   const winner = isWinner ? " grow-[8] justify-between" : " grow";
 
   return (
-    <div
+    <HFlex
       className={
-        "flex flex-row h-12 p-2 rounded-md gap-2 transition-[all] duration-300 ease-in-out" +
+        "h-12 p-2 rounded-md gap-2 transition-[all] duration-300 ease-in-out" +
         highlight +
         winner
       }
@@ -31,7 +31,7 @@ const PlayerTile = ({
           Winner!
         </p>
       )}
-    </div>
+    </HFlex>
   );
 };
 

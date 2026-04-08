@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import GameContainer from "./GameContainer";
 import { GameState } from "../types";
 import BoardConfig from "./BoardConfig";
-import Header from "./ui/Header";
-import VFlex from "./ui/VFlex";
+import { Header, VFlex } from "./ui";
 
 const content = { title: "Tic Tac Toe" };
 

@@ -1,9 +1,7 @@
 import React from "react";
 import { BoardState } from "../types";
-import Spruce from "./icons/Spruce";
-import O from "./icons/O";
-import HFlex from "./ui/HFlex";
-import VFlex from "./ui/VFlex";
+import { O, Spruce } from "./icons";
+import { HFlex, VFlex } from "./ui";
 
 const BoardDisplay = ({
   boardState,

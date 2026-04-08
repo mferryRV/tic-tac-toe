@@ -9,8 +9,7 @@ import {
 } from "../types";
 import BoardDisplay from "./BoardDisplay";
 import PlayerTile from "./PlayerTile";
-import VFlex from "./ui/VFlex";
-import HFlex from "./ui/HFlex";
+import { HFlex, VFlex } from "./ui";
 
 const content = {
   alert: {
