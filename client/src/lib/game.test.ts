@@ -141,3 +141,13 @@ test("Catscan", () => {
     ]),
   ).toBe(0);
 });
+
+test("X wins on last move", () => {
+  expect(
+    game.checkWinCondition({ player: 1, yIndex: 2, xIndex: 2 }, [
+      [1, -1, 1],
+      [-1, 1, -1],
+      [-1, 1, 1],
+    ]),
+  ).toBe(1);
+});

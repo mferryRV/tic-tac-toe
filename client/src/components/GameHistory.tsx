@@ -67,9 +67,10 @@ const GameHistory = ({
                 <HFlex key={player} className="h-12 gap-2">
                   {player == "X" ? <Spruce /> : <O />}
                   <p>
-                    {stats?.[player]} win{stats?.[player] > 1 && "s"} (
-                    {stats &&
-                      Math.round((100 * stats?.[player]) / stats?.total)}
+                    {stats?.[player]} win{stats?.[player] !== 1 && "s"} (
+                    {(stats &&
+                      Math.round((100 * stats?.[player]) / stats?.total)) ||
+                      0}
                     %)
                   </p>
                 </HFlex>
