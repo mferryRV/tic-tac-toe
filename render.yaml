@@ -1,7 +1,7 @@
 databases:
   - name: tictactoe-db
     databaseName: tictactoe
-    user: postgres
+    user: tictactoe
     plan: free
 
 services:
@@ -9,7 +9,7 @@ services:
     name: tictactoe-backend
     runtime: node
     rootDir: backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm ci && npm run build
     startCommand: npm start
     plan: free
     envVars:
