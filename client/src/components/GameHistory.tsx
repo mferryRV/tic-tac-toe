@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { GameResult, GameStats } from "../lib/api";
 import { HFlex, VFlex } from "./ui";
-import { CaretDown, CaretUp, O, Spruce } from "./icons";
+import { CaretDown, CaretUp, O, Refresh, Spruce, Warning } from "./icons";
 import { displayTime } from "../lib/utils";
 
 const GameHistoryItem = ({
@@ -28,13 +28,14 @@ const GameHistory = ({
   games,
   stats,
   isLoading,
+  hasError,
 }: {
   games?: GameResult[];
   stats?: GameStats;
   isLoading: boolean;
   hasError: boolean;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <VFlex
@@ -47,7 +48,20 @@ const GameHistory = ({
       </HFlex>
       {isOpen && (
         <VFlex className="p-2 w-full rounded-md">
-          {stats && (
+          {isLoading && (
+            <HFlex className="justify-center p-4">
+              <div className="h-8 w-8 animate-spin">
+                <Refresh />
+              </div>
+            </HFlex>
+          )}
+          {hasError && (
+            <VFlex className="items-center gap-2 p-4">
+              <Warning className="h-8 w-8" />
+              <p className="font-bold">Unable to get history</p>
+            </VFlex>
+          )}
+          {!isLoading && !hasError && stats && (
             <HFlex className="justify-between pb-2">
               {["X", "O"].map((player) => (
                 <HFlex key={player} className="h-12 gap-2">
@@ -62,7 +76,8 @@ const GameHistory = ({
               ))}
             </HFlex>
           )}
-          {games &&
+          {!hasError &&
+            games &&
             games.map((result) => (
               <GameHistoryItem key={result.id} result={result} />
             ))}
