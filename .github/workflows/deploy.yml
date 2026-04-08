@@ -15,7 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Render backend deploy
-        run: curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+        run: |
+          response=$(curl -s -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}")
+          echo "Hook response: $response"
 
       - name: Wait for deploy to complete
         run: |
